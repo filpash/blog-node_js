@@ -1,6 +1,7 @@
 const express = require('express');
 const routes = express.Router();
 const User = require('../models/user');
+const Post = require('../models/post');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const config = require('../config/db');
@@ -30,7 +31,7 @@ routes.post('/auth', (req, res) => {
         if (err) throw err;
         if (!user) {
             return res.json({success: false, msg: 'This user was not found.'})
-        };
+        }
 
         User.comparePassword(password, user.password, (err, isMatch) => {
             if (err) throw err;
@@ -56,8 +57,23 @@ routes.post('/auth', (req, res) => {
     })
 });
 
-routes.get('/dashboard', passport.authenticate('jwt', {session: false}), (req, res) => {
-    res.send('Dashboard page');
+routes.post('/dashboard', (req, res) => {
+    let newPost = new Post({
+        category: req.body.category,
+        title: req.body.title,
+        photo: req.body.photo,
+        text: req.body.text,
+        author: req.body.author,
+        date: req.body.date
+    });
+
+    Post.addPost(newPost, (err, post) => {
+        if (err) {
+            res.json({success: false, msg: 'Post has not been added.'})
+        } else {
+            res.json({success: true, msg: 'Post has been added.'})
+        }
+    });
 });
 
 module.exports = routes;

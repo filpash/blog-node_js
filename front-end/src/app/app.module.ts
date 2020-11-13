@@ -13,6 +13,7 @@ import {FormsModule} from "@angular/forms";
 import {FlashMessagesModule} from "angular2-flash-messages";
 import {AuthService} from "./auth.service";
 import {HttpModule} from "@angular/http";
+import {QuillModule} from 'ngx-quill';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import {HttpModule} from "@angular/http";
         FormsModule,
         FlashMessagesModule,
         FlashMessagesModule.forRoot(),
-        HttpModule
+        HttpModule,
+        QuillModule.forRoot()
     ],
   providers: [AuthService],
   bootstrap: [AppComponent]
